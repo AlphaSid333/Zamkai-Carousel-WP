@@ -2,8 +2,11 @@
 /**
  * Plugin Name: Zamkai YT Carousel
  * Description: Displays YouTube playlist videos in a customizable grid format
- * Author: Zamkai master
- * Version: 1.0
+ * Author: Zamkai Master
+ * Text Domain: zamkai-yt-carousel
+ * License: GNU General Public License v3.0
+ * License URI: http://www.gnu.org/licenses/gpl-3.0.html
+ * Version: 1.0.0
  */
 
 if (!defined('ABSPATH')) exit;
