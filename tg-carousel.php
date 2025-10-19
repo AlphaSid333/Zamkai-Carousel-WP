@@ -23,7 +23,7 @@ if (!defined('ABSPATH')) exit;
 class YouTube_Playlist_Grid {
     
     // This stores the name we use to save settings in the WordPress database
-    // It's like a label on a storage box where we keep all our plugin settingsgitc
+    // It's like a label on a storage box where we keep all our plugin settings
     private $option_name = 'ytpg_settings';
     
     /**
