@@ -112,7 +112,7 @@ public function settings_page() {
     
     // Include the template file for the settings page layout
     // This separates the HTML/PHP output from the main class method for better maintainability
-    include plugin_dir_path(__FILE__) . 'templates/layout-1.php';
+    include plugin_dir_path(__FILE__) . 'admin-menu.php';
 }
     
 /**
@@ -124,14 +124,29 @@ public function enqueue_styles() {
     // Get our settings to access custom CSS
     $settings = get_option($this->option_name);
     
+
+// Get the gallery style setting (default to 'simple' if not set)
+        $gallery_style = $settings['gallery_style'] ?? 'simple';
+
+        if ($gallery_style === 'masonry') {
+            wp_enqueue_style(
+                'ytpg-default',                          // Handle (unique identifier)
+                plugins_url('css/maso-yt-cards.css', __FILE__), // URL to the CSS file
+                array(),                                 // Dependencies (add if needed, e.g., array('wp-block-library'))
+                '1.0.0',                                 // Version (update for cache busting)
+                'all'                                    // Media type
+            );
+        } else{
+            wp_enqueue_style(
+                'ytpg-default',                          // Handle (unique identifier)
+                plugins_url('css/yt-cards.css', __FILE__), // URL to the CSS file
+                array(),                                 // Dependencies (add if needed, e.g., array('wp-block-library'))
+                '1.0.0',                                 // Version (update for cache busting)
+                'all'                                    // Media type
+            );
+        }
     // Enqueue the external CSS file (replace __FILE__ with $this->plugin_file if needed)
-    wp_enqueue_style(
-        'ytpg-default',                          // Handle (unique identifier)
-        plugins_url('css/yt-cards.css', __FILE__), // URL to the CSS file
-        array(),                                 // Dependencies (add if needed, e.g., array('wp-block-library'))
-        '1.0.0',                                 // Version (update for cache busting)
-        'all'                                    // Media type
-    );
+    
     
     // If user added custom CSS in settings, add that too
     // This allows them to override our default styles (loads after the file)
@@ -252,66 +267,32 @@ public function enqueue_styles() {
         
         // Start output buffering - we'll collect HTML and return it all at once
         ob_start();
-        ?>
         
-        <!-- GRID CONTAINER - Wraps all video cards -->
-        <div class="ytpg-container">
-            <div class="ytpg-grid">
-                
-                <?php 
-                // LOOP through each video in the playlist
-                foreach ($videos['items'] as $item): 
-                    // Extract video information from the API response
-                    $snippet = $item['snippet'];
-                    $video_id = $snippet['resourceId']['videoId'];
-                    $title = $snippet['title'];
-                    $description = $snippet['description'];
-                    
-                    // Get the best quality thumbnail available
-                    // Try "high" quality first, fall back to "default" if not available
-                    $thumbnail = isset($snippet['thumbnails']['high']['url']) ? $snippet['thumbnails']['high']['url'] : (isset($snippet['thumbnails']['default']['url']) ? $snippet['thumbnails']['default']['url']: '');
-                    
-                    // Build the YouTube watch URL
-                    $video_url = 'https://www.youtube.com/watch?v=' . $video_id;
-                ?>
-                
-                    <!-- SINGLE VIDEO CARD -->
-                    <div class="ytpg-video-card">
-                        
-                        <!-- THUMBNAIL SECTION -->
-                        <div class="ytpg-thumbnail">
-                            <img src="<?php echo esc_url($thumbnail); ?>" 
-                                 alt="<?php echo esc_attr($title); ?>" 
-                                 loading="lazy">
-                        </div>
-                        
-                        <!-- CONTENT SECTION (title, description, button) -->
-                        <div class="ytpg-content">
-                            <!-- Video Title -->
-                            <h3 class="ytpg-title"><?php echo esc_html($title); ?></h3>
-                            
-                            <!-- Video Description (only show if it exists) -->
-                            <?php if (!empty($description)): ?>
-                                <p class="ytpg-description"><?php echo esc_html($description); ?></p>
-                            <?php endif; ?>
-                            
-                            <!-- Watch Button (opens in new tab) -->
-                            <a href="<?php echo esc_url($video_url); ?>" 
-                               target="_blank" 
-                               rel="noopener noreferrer" 
-                               class="ytpg-play-button">
-                                Watch Video
-                            </a>
-                        </div>
-                        
-                    </div>
-                    
-                <?php endforeach; ?>
-                
-            </div>
-        </div>
+        // Get the gallery style setting (default to 'simple' if not set)
+        $gallery_style = $settings['gallery_style'] ?? 'simple';
+
+        // Determine the template path based on the style
+            $template_path = '';
+            if ($gallery_style === 'simple') {
+                $template_path = plugin_dir_path(__FILE__) . '/templates/layout-1.php';
+            } elseif ($gallery_style === 'masonry') {
+                $template_path = plugin_dir_path(__FILE__) . '/templates/layout-2.php';
+            } else {
+                // Default fallback to 'simple' if invalid value
+                $template_path = plugin_dir_path(__FILE__) . '/templates/layout-1.php';
+            }
+
+            // Check if the template file exists, then include it
+            if (file_exists($template_path)) {
+                // Start output buffering - we'll collect HTML and return it all at once
+                include $template_path;
+                // Get all the HTML we collected and return it
+            } else {
+                // Fallback error if template is missing
+                return '<div class="ytpg-error">Template file not found for style: ' . esc_html($gallery_style) . '</div>';
+            }
+
         
-        <?php
         // Get all the HTML we collected and return it
         return ob_get_clean();
     }

@@ -1,108 +1,109 @@
-            /* CONTAINER - Wraps everything and centers it on the page */
-            .ytpg-container {
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 20px;
-            }
-            
-            /* GRID - Creates the responsive grid layout for video cards */
-            .ytpg-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-                gap: 30px;
-                margin-top: 20px;
-            }
-            
-            /* VIDEO CARD - The box containing each video */
-            .ytpg-video-card {
-                background: #fff;
-                border-radius: 8px;
-                overflow: hidden;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-            }
-            
-            /* HOVER EFFECT - Card lifts up when you hover over it */
-            .ytpg-video-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-            }
-            
-            /* THUMBNAIL - Container for the video thumbnail image */
-            .ytpg-thumbnail {
-                position: relative;
-                width: 100%;
-                padding-top: 56.25%; /* Creates 16:9 aspect ratio */
-                overflow: hidden;
-                background: #000;
-            }
-            
-            /* THUMBNAIL IMAGE - The actual video preview image */
-            .ytpg-thumbnail img {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                object-fit: cover; /* Makes image fill space nicely */
-            }
-            
-            /* CONTENT - The text area below the thumbnail */
-            .ytpg-content {
-                padding: 15px;
-            }
-            
-            /* TITLE - The video title */
-            .ytpg-title {
-                font-size: 16px;
-                font-weight: 600;
-                margin: 0 0 10px 0;
-                color: #333;
-                line-height: 1.4;
-            }
-            
-            /* DESCRIPTION - The video description text */
-            .ytpg-description {
-                font-size: 14px;
-                color: #666;
-                line-height: 1.6;
-                margin: 0 0 15px 0;
-                display: -webkit-box;
-                line-clamp: 3;
-                -webkit-line-clamp: 3; /* Limits to 3 lines */
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-            }
-            
-            /* PLAY BUTTON - The red button that links to YouTube */
-            .ytpg-play-button {
-                display: inline-block;
-                background: #ff0000;
-                color: #fff;
-                padding: 10px 20px;
-                text-decoration: none;
-                border-radius: 4px;
-                font-weight: 600;
-                transition: background 0.3s ease;
-            }
-            
-            /* PLAY BUTTON HOVER - Darker red when hovering */
-            .ytpg-play-button:hover {
-                background: #cc0000;
-                color: #fff;
-            }
-            
-            /* PLAY ICON - Adds the play triangle before button text */
-            .ytpg-play-button::before {
-                content: '▶ ';
-                margin-right: 5px;
-            }
-            
-            /* ERROR MESSAGE - Styling for error messages */
-            .ytpg-error {
-                background: #ffebee;
-                border-left: 4px solid #f44336;
-                padding: 15px;
-                margin: 20px 0;
-                color: #c62828;
-            }
+/* CONTAINER - Wraps everything and centers it on the page */
+.ytpg-container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 20px;
+}
+
+/* GRID - Creates the responsive grid layout for video cards */
+.ytpg-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+gap: 30px;
+margin-top: 20px;
+}
+
+/* VIDEO CARD - The box containing each video */
+.ytpg-video-card {
+background: #fff;
+border-radius: 8px;
+overflow: hidden;
+box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* HOVER EFFECT - Card lifts up when you hover over it */
+.ytpg-video-card:hover {
+transform: translateY(-5px);
+box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+
+/* THUMBNAIL - Container for the video thumbnail image */
+.ytpg-thumbnail {
+position: relative;
+width: 100%;
+padding-top: 56.25%; /* Creates 16:9 aspect ratio */
+overflow: hidden;
+background: #000;
+}
+
+/* THUMBNAIL IMAGE - The actual video preview image */
+.ytpg-thumbnail img {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+object-fit: cover; /* Makes image fill space nicely */
+}
+
+/* CONTENT - The text area below the thumbnail */
+.ytpg-content {
+padding: 15px;
+}
+
+/* TITLE - The video title */
+.ytpg-title {
+font-size: 16px;
+font-weight: 600;
+margin: 0 0 10px 0;
+color: #333;
+line-height: 1.4;
+}
+
+/* DESCRIPTION - The video description text */
+.ytpg-description {
+font-size: 14px;
+color: #666;
+line-height: 1.6;
+margin: 0 0 15px 0;
+display: -webkit-box;
+line-clamp: 3;
+-webkit-line-clamp: 3; /* Limits to 3 lines */
+-webkit-box-orient: vertical;
+overflow: hidden;
+}
+
+/* PLAY BUTTON - The red button that links to YouTube */
+.ytpg-play-button {
+display: inline-block;
+background: #ff0000;
+color: #fff;
+padding: 10px 20px;
+text-decoration: none;
+border-radius: 4px;
+font-size: 13px;
+font-weight: 600;
+transition: background 0.3s ease;
+}
+
+/* PLAY BUTTON HOVER - Darker red when hovering */
+.ytpg-play-button:hover {
+background: #cc0000;
+color: #fff;
+}
+
+/* PLAY ICON - Adds the play triangle before button text */
+.ytpg-play-button::before {
+content: '▶ ';
+margin-right: 5px;
+}
+
+/* ERROR MESSAGE - Styling for error messages */
+.ytpg-error {
+background: #ffebee;
+border-left: 4px solid #f44336;
+padding: 15px;
+margin: 20px 0;
+color: #c62828;
+}

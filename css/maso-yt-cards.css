@@ -1,0 +1,135 @@
+/* CONTAINER - Wraps everything and centers it on the page */
+.ytpg-maso-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* MASONRY GRID - 4-column layout using CSS multi-column for a Pinterest-like masonry effect */
+/* Defaults to 4 columns for a cleaner, less cluttered look */
+.ytpg-maso-grid {
+    column-count: 3; /* Fixed to 4 columns as requested */
+    column-gap: 25px; /* Slightly tighter gap for better flow */
+    column-fill: balance; /* Evenly distributes items */
+    orphans: 1; /* Minimum 1 item per column */
+    widows: 1;
+    width: 100%;
+}
+
+/* VIDEO CARD - Flows into columns with natural height variation */
+.ytpg-maso-video-card {
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    break-inside: avoid-column; /* No splitting across columns */
+    page-break-inside: avoid;
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 25px; /* Matches column-gap for consistent spacing */
+    vertical-align: top; /* Top-aligns cards in columns */
+}
+
+/* HOVER EFFECT - Subtle lift on hover */
+.ytpg-maso-video-card:hover {
+    transform: translateY(-3px); /* Reduced lift for subtlety */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* THUMBNAIL - Fixed aspect for consistency, with overflow hidden */
+.ytpg-maso-thumbnail {
+    width: 100%;
+    aspect-ratio: 16 / 9; /* Fixed 16:9 for uniform thumbnails */
+    overflow: hidden;
+    background: #f0f0f0; /* Light fallback bg */
+    position: relative;
+    background: #000;
+}
+
+/* THUMBNAIL IMAGE - Covers the fixed aspect ratio */
+.ytpg-maso-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Crops to fit without distortion */
+    display: block;
+}
+
+/* CONTENT - Padding for breathing room */
+.ytpg-maso-content {
+    padding: 12px; /* Slightly reduced for compact cards */
+}
+
+/* TITLE - Compact title styling */
+.ytpg-maso-title {
+    font-size: 15px; /* Slightly smaller for balance */
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    color: #333;
+    line-height: 1.3;
+    /* Allow 2 lines max for title variation */
+    display: -webkit-box;
+    line-clamp: 3;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* DESCRIPTION - Shortened and clamped for controlled height variation */
+.ytpg-maso-description {
+    font-size: 13px; /* Smaller to fit more without overwhelming */
+    color: #666;
+    line-height: 1.5;
+    margin: 0 0 12px 0;
+    /* Clamp to 3 lines for subtle height differences */
+    display: -webkit-box;
+    /* line-clamp: 3;
+    -webkit-line-clamp: 3; */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* PLAY BUTTON - Consistent button */
+.ytpg-maso-play-button {
+    display: inline-block;
+    background: #ff0000;
+    color: #fff;
+    padding: 8px 16px; /* Compact padding */
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 13px;
+    transition: background 0.3s ease;
+}
+
+/* PLAY BUTTON HOVER */
+.ytpg-maso-play-button:hover {
+    background: #cc0000;
+    color: #fff;
+}
+
+/* PLAY ICON */
+.ytpg-maso-play-button::before {
+    content: '▶ ';
+    margin-right: 4px;
+}
+
+/* ERROR MESSAGE */
+.ytpg-maso-error {
+    background: #ffebee;
+    border-left: 4px solid #f44336;
+    padding: 15px;
+    margin: 20px 0;
+    color: #c62828;
+}
+
+/* RESPONSIVE - Scale down to 1 column on smaller screens only */
+@media (max-width: 768px) {
+    .ytpg-maso-grid {
+        column-count: 1; /* Single column on mobile */
+    }
+    
+    .ytpg-maso-container {
+        padding: 15px;
+    }
+}
