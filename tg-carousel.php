@@ -4,11 +4,6 @@
  * Description: Displays YouTube playlist videos in a customizable grid format
  * Author: Zamkai master
  * Version: 1.0
- * Author: Zamkai Master
- * Text Domain: zamkai-yt-carousel
- * License: GNU General Public License v3.0
- * License URI: http://www.gnu.org/licenses/gpl-3.0.html
- * Version: 1.0.0
  */
 
 // This prevents people from accessing this file directly in their browser
@@ -106,254 +101,59 @@ class YouTube_Playlist_Grid {
         }
     }
     
-    /**
-     * SETTINGS PAGE
-     * This creates the entire admin interface where users configure the plugin
-     * It displays input fields for API key, playlist ID, number of videos, and custom CSS
-     */
-    public function settings_page() {
-        // Get our current settings from the database
-        $settings = get_option($this->option_name);
-        ?>
-        <div class="wrap">
-            <h1>YouTube Playlist Grid Settings</h1>
-            
-            <?php 
-            // Display any success or error messages (like "Cache cleared!")
-            settings_errors('ytpg_messages'); 
-            ?>
-            
-            <!-- MAIN SETTINGS FORM -->
-            <!-- This form saves to WordPress using options.php -->
-            <form method="post" action="options.php">
-                <?php 
-                // Add hidden security fields that WordPress requires
-                settings_fields('ytpg_settings_group'); 
-                ?>
-                
-                <table class="form-table">
-                    <!-- API KEY FIELD -->
-                    <tr>
-                        <th scope="row">
-                            <label for="api_key">YouTube API Key</label>
-                        </th>
-                        <td>
-                            <!-- Text input for the YouTube API key -->
-                            <input type="text" id="api_key" name="<?php echo $this->option_name; ?>[api_key]" 
-                                   value="<?php echo esc_attr($settings['api_key'] ?? ''); ?>" 
-                                   class="regular-text" />
-                            <p class="description">Get your API key from <a href="https://console.developers.google.com/" target="_blank">Google Developers Console</a></p>
-                        </td>
-                    </tr>
-                    
-                    <!-- PLAYLIST ID FIELD -->
-                    <tr>
-                        <th scope="row">
-                            <label for="playlist_id">Playlist ID or URL</label>
-                        </th>
-                        <td>
-                            <!-- Text input for the playlist ID or full URL -->
-                            <input type="text" id="playlist_id" name="<?php echo $this->option_name; ?>[playlist_id]" 
-                                   value="<?php echo esc_attr($settings['playlist_id'] ?? ''); ?>" 
-                                   class="regular-text" />
-                            <p class="description">Enter the playlist ID (e.g., PLxxxxxxxxxxx) or full YouTube playlist URL</p>
-                        </td>
-                    </tr>
-                    
-                    <!-- NUMBER OF VIDEOS FIELD -->
-                    <tr>
-                        <th scope="row">
-                            <label for="max_results">Number of Videos</label>
-                        </th>
-                        <td>
-                            <!-- Number input limited between 1 and 50 -->
-                            <input type="number" id="max_results" name="<?php echo $this->option_name; ?>[max_results]" 
-                                   value="<?php echo esc_attr($settings['max_results'] ?? 6); ?>" 
-                                   min="1" max="50" />
-                            <p class="description">Number of videos to display (1-50)</p>
-                        </td>
-                    </tr>
-                    
-                    <!-- CUSTOM CSS FIELD -->
-                    <tr>
-                        <th scope="row">
-                            <label for="custom_css">Custom CSS</label>
-                        </th>
-                        <td>
-                            <!-- Large text area for custom CSS code -->
-                            <textarea id="custom_css" name="<?php echo $this->option_name; ?>[custom_css]" 
-                                      rows="10" class="large-text code"><?php echo esc_textarea($settings['custom_css'] ?? ''); ?></textarea>
-                            <p class="description">Add your custom CSS styles here</p>
-                        </td>
-                    </tr>
-                </table>
-                
-                <?php 
-                // Display the "Save Changes" button
-                submit_button(); 
-                ?>
-            </form>
-            
-            <hr>
-            
-            <!-- CACHE MANAGEMENT SECTION -->
-            <h2>Cache Management</h2>
-            <p>The playlist is cached for 1 hour to improve performance and reduce API usage. Use the button below to manually refresh the cache after uploading new videos.</p>
-            
-            <!-- CLEAR CACHE FORM -->
-            <!-- This is a separate form that only clears the cache -->
-            <form method="post" action="">
-                <?php 
-                // Add a security token to prevent unauthorized cache clearing
-                wp_nonce_field('ytpg_clear_cache_action', 'ytpg_clear_cache_nonce'); 
-                ?>
-                <input type="submit" name="ytpg_clear_cache" class="button button-secondary" value="Clear Cache & Refresh Playlist" />
-            </form>
-            
-            <hr>
-            
-            <!-- USAGE INSTRUCTIONS -->
-            <h2>Usage</h2>
-            <p>Use the shortcode <code>[youtube_playlist_grid]</code> in any page or post to display your playlist grid.</p>
-        </div>
-        <?php
-    }
+/**
+ * SETTINGS PAGE
+ * This creates the entire admin interface where users configure the plugin
+ * It displays input fields for API key, playlist ID, number of videos, and custom CSS
+ */
+public function settings_page() {
+    // Get our current settings from the database
+    $settings = get_option($this->option_name);
     
-    /**
-     * ENQUEUE STYLES
-     * This loads the CSS styles that make our video grid look good
-     * It runs on every front-end page (not admin pages)
-     */
-    public function enqueue_styles() {
-        // Get our settings to access custom CSS
-        $settings = get_option($this->option_name);
-        
-        // Register a "virtual" stylesheet (it doesn't exist as a file)
-        // We'll add our CSS code directly instead
-        wp_register_style('ytpg-default', false);
-        wp_enqueue_style('ytpg-default');
-        
-        // DEFAULT CSS - Makes the video grid look nice
-        // This is the base styling that always applies
-        $default_css = "
-            /* CONTAINER - Wraps everything and centers it on the page */
-            .ytpg-container {
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 20px;
-            }
-            
-            /* GRID - Creates the responsive grid layout for video cards */
-            .ytpg-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-                gap: 30px;
-                margin-top: 20px;
-            }
-            
-            /* VIDEO CARD - The box containing each video */
-            .ytpg-video-card {
-                background: #fff;
-                border-radius: 8px;
-                overflow: hidden;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-            }
-            
-            /* HOVER EFFECT - Card lifts up when you hover over it */
-            .ytpg-video-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-            }
-            
-            /* THUMBNAIL - Container for the video thumbnail image */
-            .ytpg-thumbnail {
-                position: relative;
-                width: 100%;
-                padding-top: 56.25%; /* Creates 16:9 aspect ratio */
-                overflow: hidden;
-                background: #000;
-            }
-            
-            /* THUMBNAIL IMAGE - The actual video preview image */
-            .ytpg-thumbnail img {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                object-fit: cover; /* Makes image fill space nicely */
-            }
-            
-            /* CONTENT - The text area below the thumbnail */
-            .ytpg-content {
-                padding: 15px;
-            }
-            
-            /* TITLE - The video title */
-            .ytpg-title {
-                font-size: 16px;
-                font-weight: 600;
-                margin: 0 0 10px 0;
-                color: #333;
-                line-height: 1.4;
-            }
-            
-            /* DESCRIPTION - The video description text */
-            .ytpg-description {
-                font-size: 14px;
-                color: #666;
-                line-height: 1.6;
-                margin: 0 0 15px 0;
-                display: -webkit-box;
-                -webkit-line-clamp: 3; /* Limits to 3 lines */
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-            }
-            
-            /* PLAY BUTTON - The red button that links to YouTube */
-            .ytpg-play-button {
-                display: inline-block;
-                background: #ff0000;
-                color: #fff;
-                padding: 10px 20px;
-                text-decoration: none;
-                border-radius: 4px;
-                font-weight: 600;
-                transition: background 0.3s ease;
-            }
-            
-            /* PLAY BUTTON HOVER - Darker red when hovering */
-            .ytpg-play-button:hover {
-                background: #cc0000;
-                color: #fff;
-            }
-            
-            /* PLAY ICON - Adds the play triangle before button text */
-            .ytpg-play-button::before {
-                content: '▶ ';
-                margin-right: 5px;
-            }
-            
-            /* ERROR MESSAGE - Styling for error messages */
-            .ytpg-error {
-                background: #ffebee;
-                border-left: 4px solid #f44336;
-                padding: 15px;
-                margin: 20px 0;
-                color: #c62828;
-            }
-        ";
-        
-        // Add our default CSS to the page
-        wp_add_inline_style('ytpg-default', $default_css);
-        
-        // If user added custom CSS in settings, add that too
-        // This allows them to override our default styles
-        if (!empty($settings['custom_css'])) {
-            wp_add_inline_style('ytpg-default', $settings['custom_css']);
+    // Include the template file for the settings page layout
+    // This separates the HTML/PHP output from the main class method for better maintainability
+    include plugin_dir_path(__FILE__) . 'admin-menu.php';
+}
+    
+/**
+ * ENQUEUE STYLES
+ * This loads the CSS styles that make our video grid look good
+ * It runs on every front-end page (not admin pages)
+ */
+public function enqueue_styles() {
+    // Get our settings to access custom CSS
+    $settings = get_option($this->option_name);
+    
+
+// Get the gallery style setting (default to 'simple' if not set)
+        $gallery_style = $settings['gallery_style'] ?? 'simple';
+
+        if ($gallery_style === 'masonry') {
+            wp_enqueue_style(
+                'ytpg-default',                          // Handle (unique identifier)
+                plugins_url('css/maso-yt-cards.css', __FILE__), // URL to the CSS file
+                array(),                                 // Dependencies (add if needed, e.g., array('wp-block-library'))
+                '1.0.0',                                 // Version (update for cache busting)
+                'all'                                    // Media type
+            );
+        } else{
+            wp_enqueue_style(
+                'ytpg-default',                          // Handle (unique identifier)
+                plugins_url('css/yt-cards.css', __FILE__), // URL to the CSS file
+                array(),                                 // Dependencies (add if needed, e.g., array('wp-block-library'))
+                '1.0.0',                                 // Version (update for cache busting)
+                'all'                                    // Media type
+            );
         }
+    // Enqueue the external CSS file (replace __FILE__ with $this->plugin_file if needed)
+    
+    
+    // If user added custom CSS in settings, add that too
+    // This allows them to override our default styles (loads after the file)
+    if (!empty($settings['custom_css'])) {
+        wp_add_inline_style('ytpg-default', $settings['custom_css']);
     }
+}
     
     /**
      * EXTRACT PLAYLIST ID
@@ -467,66 +267,32 @@ class YouTube_Playlist_Grid {
         
         // Start output buffering - we'll collect HTML and return it all at once
         ob_start();
-        ?>
         
-        <!-- GRID CONTAINER - Wraps all video cards -->
-        <div class="ytpg-container">
-            <div class="ytpg-grid">
-                
-                <?php 
-                // LOOP through each video in the playlist
-                foreach ($videos['items'] as $item): 
-                    // Extract video information from the API response
-                    $snippet = $item['snippet'];
-                    $video_id = $snippet['resourceId']['videoId'];
-                    $title = $snippet['title'];
-                    $description = $snippet['description'];
-                    
-                    // Get the best quality thumbnail available
-                    // Try "high" quality first, fall back to "default" if not available
-                    $thumbnail = $snippet['thumbnails']['high']['url'] ?? $snippet['thumbnails']['default']['url'];
-                    
-                    // Build the YouTube watch URL
-                    $video_url = 'https://www.youtube.com/watch?v=' . $video_id;
-                ?>
-                
-                    <!-- SINGLE VIDEO CARD -->
-                    <div class="ytpg-video-card">
-                        
-                        <!-- THUMBNAIL SECTION -->
-                        <div class="ytpg-thumbnail">
-                            <img src="<?php echo esc_url($thumbnail); ?>" 
-                                 alt="<?php echo esc_attr($title); ?>" 
-                                 loading="lazy">
-                        </div>
-                        
-                        <!-- CONTENT SECTION (title, description, button) -->
-                        <div class="ytpg-content">
-                            <!-- Video Title -->
-                            <h3 class="ytpg-title"><?php echo esc_html($title); ?></h3>
-                            
-                            <!-- Video Description (only show if it exists) -->
-                            <?php if (!empty($description)): ?>
-                                <p class="ytpg-description"><?php echo esc_html($description); ?></p>
-                            <?php endif; ?>
-                            
-                            <!-- Watch Button (opens in new tab) -->
-                            <a href="<?php echo esc_url($video_url); ?>" 
-                               target="_blank" 
-                               rel="noopener noreferrer" 
-                               class="ytpg-play-button">
-                                Watch Video
-                            </a>
-                        </div>
-                        
-                    </div>
-                    
-                <?php endforeach; ?>
-                
-            </div>
-        </div>
+        // Get the gallery style setting (default to 'simple' if not set)
+        $gallery_style = $settings['gallery_style'] ?? 'simple';
+
+        // Determine the template path based on the style
+            $template_path = '';
+            if ($gallery_style === 'simple') {
+                $template_path = plugin_dir_path(__FILE__) . '/templates/layout-1.php';
+            } elseif ($gallery_style === 'masonry') {
+                $template_path = plugin_dir_path(__FILE__) . '/templates/layout-2.php';
+            } else {
+                // Default fallback to 'simple' if invalid value
+                $template_path = plugin_dir_path(__FILE__) . '/templates/layout-1.php';
+            }
+
+            // Check if the template file exists, then include it
+            if (file_exists($template_path)) {
+                // Start output buffering - we'll collect HTML and return it all at once
+                include $template_path;
+                // Get all the HTML we collected and return it
+            } else {
+                // Fallback error if template is missing
+                return '<div class="ytpg-error">Template file not found for style: ' . esc_html($gallery_style) . '</div>';
+            }
+
         
-        <?php
         // Get all the HTML we collected and return it
         return ob_get_clean();
     }
