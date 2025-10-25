@@ -90,13 +90,9 @@ class YouTube_Playlist_Grid {
                 // Delete the cached data from WordPress
                 delete_transient($cache_key);
                 
-                // Show a success message to the user
-                add_settings_error(
-                    'ytpg_messages',
-                    'ytpg_cache_cleared',
-                    'Cache cleared successfully! The playlist will refresh on the next page load.',
-                    'success'
-                );
+                // Store success message in a transient (temporary storage)
+                // This way we can display it once and it won't duplicate
+                set_transient('ytpg_cache_cleared_notice', true, 30);
             }
         }
     }

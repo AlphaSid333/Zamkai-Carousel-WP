@@ -8,9 +8,15 @@ if (!defined('ABSPATH')) {
     <h1>YouTube Playlist Grid Settings</h1>
     
     <?php 
-    // Display any success or error messages (like "Cache cleared!")
-    settings_errors('ytpg_messages'); 
-    ?>
+    if (get_transient('ytpg_cache_cleared_notice')) {
+            echo '<div class="notice notice-success is-dismissible"><p>Cache cleared successfully! The playlist will refresh on the next page load.</p></div>';
+            // Delete the transient so message only shows once
+            delete_transient('ytpg_cache_cleared_notice');
+        }
+        
+        // Display any other WordPress settings messages
+        settings_errors(); 
+        ?>
     
     <!-- MAIN SETTINGS FORM -->
     <!-- This form saves to WordPress using options.php -->
