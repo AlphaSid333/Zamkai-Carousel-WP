@@ -1,0 +1,298 @@
+/* ====================================
+   YOUTUBE PLAYLIST GRID - MODERN DESIGN
+   ==================================== */
+
+/* CONTAINER - Wraps everything and centers it on the page */
+.ytpg-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* GRID - Creates the responsive masonry-style grid layout */
+.ytpg-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+/* VIDEO CARD - The card with image background and overlay */
+.ytpg-video-card {
+    position: relative;
+    height: 520px; /* Increased from 420px to prevent button clipping */
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* CARD HOVER EFFECT - Elevates and enhances shadow */
+.ytpg-video-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+/* BACKGROUND IMAGE - The video thumbnail as background (16:9 ratio preserved) */
+.ytpg-card-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: contain; /* Changed from cover to contain to show full 16:9 thumbnail */
+    background-position: center top; /* Position at top to show more thumbnail */
+    background-repeat: no-repeat;
+    background-color: #000; /* Black background for letterboxing */
+    transition: transform 0.6s ease;
+}
+
+/* ZOOM EFFECT on hover - more subtle to keep 16:9 visible */
+.ytpg-video-card:hover .ytpg-card-background {
+    transform: scale(1.05); /* Reduced from 1.1 to keep more of image visible */
+}
+
+/* GRADIENT OVERLAY - Dark gradient over the image */
+.ytpg-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.1) 0%,
+        rgba(0, 0, 0, 0.3) 30%,
+        rgba(0, 0, 0, 0.6) 60%,
+        rgba(0, 0, 0, 0.95) 100%
+    );
+    transition: background 0.4s ease;
+}
+
+/* DARKER OVERLAY on hover */
+.ytpg-video-card:hover .ytpg-overlay {
+    background: linear-gradient(to bottom, 
+    rgb(0 0 0 / 0%) 0%, 
+    rgb(0 0 0 / 0%) 60%, 
+    rgba(255, 0, 0, 0.9) 100%);
+}
+
+/* CONTENT - Positioned absolutely over the image */
+.ytpg-content {
+    position: relative;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 25px; /* Adjusted padding */
+    color: #fff;
+    z-index: 2;
+}
+
+/* PLAY ICON - Large play button at top */
+.ytpg-play-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 0, 0, 0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    box-shadow: 0 4px 15px rgba(255, 0, 0, 0.4);
+    transition: all 0.3s ease;
+    flex-shrink: 0; /* Prevent icon from shrinking */
+}
+
+.ytpg-play-icon svg {
+    width: 28px;
+    height: 28px;
+    color: #fff;
+    margin-left: 3px;
+}
+
+/* PLAY ICON HOVER - Grows and pulses */
+.ytpg-video-card:hover .ytpg-play-icon {
+    transform: scale(1.15);
+    box-shadow: 0 6px 25px rgba(255, 0, 0, 0.6);
+}
+
+/* INFO SECTION - Bottom section with text */
+.ytpg-info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: auto; /* Push to bottom */
+    padding-bottom: 5px; /* Extra padding at bottom */
+}
+
+/* TITLE - The video title */
+.ytpg-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+    color: #fff;
+    line-height: 1.3;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    transition: color 0.3s ease;
+}
+
+.ytpg-video-card:hover .ytpg-title {
+    color: #e60000;
+}
+
+/* DESCRIPTION - The video description text */
+.ytpg-description {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.5;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+    opacity: 0.8;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+}
+
+/* DESCRIPTION REVEAL on hover */
+.ytpg-video-card:hover .ytpg-description {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* WATCH BUTTON - Sleek button with icon */
+.ytpg-watch-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #ff0000;
+    color: #fff;
+    padding: 14px 28px; /* Slightly larger padding */
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    align-self: flex-start;
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 8px; /* Extra spacing above button */
+}
+
+.ytpg-watch-btn svg {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.3s ease;
+}
+
+/* WATCH BUTTON HOVER - Grows and arrow moves */
+.ytpg-watch-btn:hover {
+    background: #222222;
+    transform: translateX(5px);
+    box-shadow: 0 6px 20px rgba(63, 63, 63, 0.733);
+}
+
+.ytpg-watch-btn:hover svg {
+    transform: translateX(5px);
+}
+
+/* RESPONSIVE - Tablets */
+@media (max-width: 1024px) {
+    .ytpg-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+    }
+    
+    .ytpg-video-card {
+        height: 450px;
+    }
+    
+    .ytpg-content {
+        padding: 20px;
+    }
+}
+
+/* RESPONSIVE - Mobile */
+@media (max-width: 640px) {
+    .ytpg-container {
+        padding: 20px 15px;
+    }
+    
+    .ytpg-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .ytpg-video-card {
+        height: 420px;
+    }
+    
+    .ytpg-content {
+        padding: 20px;
+    }
+    
+    .ytpg-play-icon {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .ytpg-play-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .ytpg-title {
+        font-size: 18px;
+    }
+    
+    .ytpg-description {
+        font-size: 13px;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+    }
+    
+    .ytpg-watch-btn {
+        padding: 12px 24px;
+        font-size: 13px;
+    }
+}
+
+/* ERROR MESSAGE - Styling for error messages */
+.ytpg-error {
+    background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+    border-left: 5px solid #f44336;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    color: #c62828;
+    font-size: 15px;
+    box-shadow: 0 4px 12px rgba(244, 67, 54, 0.1);
+}
+
+/* LOADING STATE (optional - add if needed) */
+.ytpg-loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+    font-size: 16px;
+}
+
+/* NO VIDEOS MESSAGE (optional - add if needed) */
+.ytpg-no-videos {
+    text-align: center;
+    padding: 60px 20px;
+    color: #999;
+    font-size: 16px;
+}

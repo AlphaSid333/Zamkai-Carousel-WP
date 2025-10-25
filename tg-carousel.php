@@ -124,10 +124,10 @@ public function enqueue_styles() {
 // Get the gallery style setting (default to 'simple' if not set)
         $gallery_style = $settings['gallery_style'] ?? 'simple';
 
-        if ($gallery_style === 'masonry') {
+        if ($gallery_style === 'modern') {
             wp_enqueue_style(
                 'ytpg-default',                          // Handle (unique identifier)
-                plugins_url('css/maso-yt-cards.css', __FILE__), // URL to the CSS file
+                plugins_url('css/modern-yt-cards.css', __FILE__), // URL to the CSS file
                 array(),                                 // Dependencies (add if needed, e.g., array('wp-block-library'))
                 '1.0.0',                                 // Version (update for cache busting)
                 'all'                                    // Media type
@@ -271,7 +271,7 @@ public function enqueue_styles() {
             $template_path = '';
             if ($gallery_style === 'simple') {
                 $template_path = plugin_dir_path(__FILE__) . '/templates/layout-1.php';
-            } elseif ($gallery_style === 'masonry') {
+            } elseif ($gallery_style === 'modern') {
                 $template_path = plugin_dir_path(__FILE__) . '/templates/layout-2.php';
             } else {
                 // Default fallback to 'simple' if invalid value

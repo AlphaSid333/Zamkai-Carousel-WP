@@ -3,70 +3,84 @@
 if (!defined('ABSPATH')) {
     exit;
 }
-?>     
-<!-- MASONRY GRID CONTAINER - Wraps all video cards in a 2-column masonry layout -->
-<div class="ytpg-maso-container">
-    <div class="ytpg-maso-grid">
-        <?php 
+?>
+
+<!-- GRID CONTAINER - Wraps all video cards -->
+<div class="ytpg-container">
+    <div class="ytpg-grid">
+        
+        <?php
         // LOOP through each video in the playlist
-        foreach ($videos['items'] as $item): 
+        foreach ($videos['items'] as $item):
+            
             // Extract video information from the API response
             $snippet = $item['snippet'];
             $video_id = $snippet['resourceId']['videoId'];
             $title = $snippet['title'];
             $description = $snippet['description'];
             
-            // Shorten the description to avoid overly long text and UTM links
-            // Uses WordPress's wp_trim_words to limit to 20 words with ellipsis
-            // This prevents full links/UTM params from showing if they're at the end
-            $description = wp_trim_words($description, 30, '...');
-            
             // Get the best quality thumbnail available
             // Try "high" quality first, fall back to "default" if not available
-            $thumbnail = isset($snippet['thumbnails']['high']['url']) ? $snippet['thumbnails']['high']['url'] : (isset($snippet['thumbnails']['default']['url']) ? $snippet['thumbnails']['default']['url']: '');
+            $thumbnail = isset($snippet['thumbnails']['high']['url']) 
+                ? $snippet['thumbnails']['high']['url'] 
+                : (isset($snippet['thumbnails']['default']['url']) 
+                    ? $snippet['thumbnails']['default']['url']
+                    : '');
             
             // Build the YouTube watch URL
             $video_url = 'https://www.youtube.com/watch?v=' . $video_id;
-            
-            // Randomize line clamp for description (2-4 lines) to enhance masonry height variation
-            // This adds subtle randomness per card without affecting performance
-            $line_clamp = rand(4, 8);  // Random integer between 2 and 4
         ?>
         
-            <!-- SINGLE VIDEO CARD -->
-            <div class="ytpg-maso-video-card">
+        <!-- SINGLE VIDEO CARD -->
+        <div class="ytpg-video-card">
+            
+            <!-- BACKGROUND IMAGE OVERLAY -->
+            <div class="ytpg-card-background" 
+                 style="background-image: url('<?php echo esc_url($thumbnail); ?>');">
+            </div>
+            
+            <!-- GRADIENT OVERLAY -->
+            <div class="ytpg-overlay"></div>
+            
+            <!-- CONTENT SECTION (positioned over image) -->
+            <div class="ytpg-content">
                 
-                <!-- THUMBNAIL SECTION -->
-                <div class="ytpg-maso-thumbnail">
-                    <img src="<?php echo esc_url($thumbnail); ?>" 
-                         alt="<?php echo esc_attr($title); ?>" 
-                         loading="lazy">
+                <!-- Top section with play icon -->
+                <div class="ytpg-play-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
                 </div>
                 
-                <!-- CONTENT SECTION (title, description, button) -->
-                <div class="ytpg-maso-content">
+                <!-- Bottom section with text -->
+                <div class="ytpg-info">
                     <!-- Video Title -->
-                    <h3 class="ytpg-maso-title"><?php echo esc_html($title); ?></h3>
+                    <h3 class="ytpg-title"><?php echo esc_html($title); ?></h3>
                     
-                    <!-- Video Description (only show if it exists; now shortened) -->
+                    <!-- Video Description (only show if it exists) -->
                     <?php if (!empty($description)): ?>
-                        <p class="ytpg-maso-description" style="-webkit-line-clamp: <?php echo $line_clamp; ?>;">
-                            <?php echo esc_html($description); ?>
-                        </p>
+                        <p class="ytpg-description"><?php echo esc_html($description); ?></p>
                     <?php endif; ?>
                     
-                    <!-- Watch Button (opens in new tab) -->
-                    <a href="<?php echo esc_url($video_url); ?>" 
-                       target="_blank" 
-                       rel="noopener noreferrer" 
-                       class="ytpg-maso-play-button">
-                        Watch Video
+                    <!-- Watch Button -->
+                    <a href="<?php echo esc_url($video_url); ?>"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="ytpg-watch-btn">
+                        <span>Watch Now</span>
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                        </svg>
                     </a>
                 </div>
                 
             </div>
             
+        </div>
+        
         <?php endforeach; ?>
         
     </div>
 </div>
+
+<?php

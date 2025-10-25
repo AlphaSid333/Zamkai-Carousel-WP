@@ -78,7 +78,7 @@ if (!defined('ABSPATH')) {
                  <!-- Dropdown select for choosing the gallery layout style -->
                 <select id="gallery_style" name="<?php echo $this->option_name; ?>[gallery_style]">
                     <option value="simple" <?php selected($settings['gallery_style'] ?? 'simple', 'simple'); ?>>Simple Layout</option>
-                    <option value="masonry" <?php selected($settings['gallery_style'] ?? 'simple', 'masonry'); ?>>Masonry Layout</option>
+                    <option value="modern" <?php selected($settings['gallery_style'] ?? 'simple', 'modern'); ?>>Modern Layout</option>
                 </select>
                 <p class="description">Choose a layout style you want to use</p>
                 </td>
