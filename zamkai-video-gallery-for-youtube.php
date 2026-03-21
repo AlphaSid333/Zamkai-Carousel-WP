@@ -15,6 +15,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+define('ZAMKAI_YT_GALLERY', plugin_dir_path(__FILE__));
+
 /**
  * MAIN PLUGIN CLASS
  * This is the container for all our plugin's functionality
@@ -23,7 +25,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class YouTube_Playlist_Grid {
 
-	private $option_name = 'ytpg_settings';
 	/**
 	 * CONSTRUCTOR - This runs automatically when the plugin loads
 	 * It "hooks" our functions into WordPress so they run at the right times
@@ -34,58 +35,12 @@ class YouTube_Playlist_Grid {
 		// Register our shortcode [youtube_playlist_grid] so it displays videos
 		add_shortcode( 'youtube_playlist_grid', array( $this, 'render_grid' ) );
 
-		// When WordPress loads page styles, add our CSS
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ) );
-
-		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_styles' ) );
-
 		add_action( 'init', array( $this, 'zamkai_yt_register_block' ) );
 
 		// Include the admin class
-		require_once plugin_dir_path( __FILE__ ) . 'includes/admin-menu.php';
+		require_once plugin_dir_path( __FILE__ ) . 'php/zkyt-admin.php';
 	}
 
-
-
-	/**
-	 * ENQUEUE STYLES
-	 * This loads the CSS styles that make our video grid look good
-	 * It runs on every front-end page (not admin pages)
-	 */
-	public function enqueue_styles() {
-		// Get our settings to access custom CSS
-		$settings = get_option( $this->option_name );
-
-		// Get the gallery style setting (default to 'simple' if not set)
-		$gallery_style = $settings['gallery_style'] ?? 'simple';
-
-		if ( $gallery_style === 'modern' ) {
-			wp_register_style(
-				'ytpg-default',                          // Handle (unique identifier)
-				plugins_url( 'css/modern-yt-cards.css', __FILE__ ), // URL to the CSS file
-				array(),                                 // Dependencies (add if needed, e.g., array('wp-block-library'))
-				'1.0.0',                                 // Version (update for cache busting)
-				'all'                                    // Media type
-			);
-		} else {
-			wp_register_style(
-				'ytpg-default',                          // Handle (unique identifier)
-				plugins_url( 'css/yt-cards.css', __FILE__ ), // URL to the CSS file
-				array(),                                 // Dependencies (add if needed, e.g., array('wp-block-library'))
-				'1.0.0',                                 // Version (update for cache busting)
-				'all'                                    // Media type
-			);
-		}
-		wp_enqueue_style( 'ytpg-default' );
-		// Enqueue the external CSS file (replace __FILE__ with $this->plugin_file if needed)
-
-		// If user added custom CSS in settings, add that too
-		// This allows them to override our default styles (loads after the file)
-
-		if ( ! empty( $settings['custom_css'] ) ) {
-			wp_add_inline_style( 'ytpg-default', $settings['custom_css'] );
-		}
-	}
 
 	/**
 	 * EXTRACT PLAYLIST ID
