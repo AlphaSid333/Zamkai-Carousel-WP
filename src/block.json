@@ -4,7 +4,7 @@
 	"name": "zamkai-ytpg/zamkai-youtube-gallery",
 	"version": "0.1.0",
 	"title": "Zamkai YouTube Gallery",
-	"category": "widgets",
+	"category": "media",
 	"icon": "video-alt3",
 	"description": "Render a Beautiful YouTube Gallery!",
 	"example": {},
