@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 function __construct(){
-	add_action( 'admin_init', array( $this, 'handle_cache_clear' ) );
+	
 }
 
 /**
@@ -18,7 +18,8 @@ function handle_cache_clear() {
     if ( isset( $_POST['zamkai_ytpg_clear_cache'] ) && check_admin_referer( 'zamkai_ytpg_clear_cache_action', 'zamkai_ytpg_clear_cache_nonce' ) ) {
 
         // Get our saved settings from the database
-        $settings    = get_option( $this->option_name );
+        $option_name = 'zamkai_ytpg_settings';
+        $settings    = get_option( $option_name );
         $playlist_id = $settings['playlist_id'] ?? '';
         $max_results = $settings['max_results'] ?? 6;
 
@@ -31,9 +32,6 @@ function handle_cache_clear() {
             // Delete the cached data from WordPress
             delete_transient( $cache_key );
 
-            // Store success message in a transient (temporary storage)
-            // This way we can display it once and it won't duplicate
-            // set_transient('zamkai_ytpg_cache_cleared_notice', true, 30);
             add_settings_error(
                 'zamkai_ytpg_messages',               // Slug (can be anything)
                 'zamkai_ytpg_cache_cleared',          // Unique code

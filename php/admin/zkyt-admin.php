@@ -22,7 +22,9 @@ class Zamkai_YTPG_Admin {
 
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_styles' ) );
 
-        // add_action( 'init', array( $this, 'register_block' ) );
+		require_once ZAMKAI_YT_GALLERY . 'php/cache-handler.php';
+
+		add_action( 'admin_init', 'handle_cache_clear' );
 
 	}
 
@@ -53,7 +55,6 @@ class Zamkai_YTPG_Admin {
         $settings = get_option( $this->option_name );
 
         require ZAMKAI_YT_GALLERY . 'php/admin/admin-menu-1.php';
-        require_once ZAMKAI_YT_GALLERY . 'php/cache-handler.php';
     }
 
 	/**
