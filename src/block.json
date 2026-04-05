@@ -22,7 +22,7 @@
 			"default": "wide"
 		}
 	},
-	"render": "file:../includes/render.php",
+	"render": "file:../php/functions/block-render.php",
 	"editorScript": "file:./index.js",
 	"editorStyle": "zamkai-ytpg-default",
 	"style": "zamkai-ytpg-default"

@@ -20,7 +20,7 @@ $settings = get_option( $this->option_name );
 		} else {
 			wp_register_style(
 				'zamkai-ytpg-default',                          // Handle (unique identifier)
-				ZAMKAI_YT_GALLERY_URL.'/css/yt-cards.css', // URL to the CSS file
+				ZAMKAI_YT_GALLERY_URL.'css/yt-cards.css', // URL to the CSS file
 				array(),                                 // Dependencies (add if needed, e.g., array('wp-block-library'))
 				'1.0.0',                                 // Version (update for cache busting)
 				'all'                                    // Media type

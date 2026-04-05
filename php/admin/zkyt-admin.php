@@ -22,7 +22,11 @@ class Zamkai_YTPG_Admin {
 
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_styles' ) );
 
-		require_once ZAMKAI_YT_GALLERY . 'php/cache-handler.php';
+		add_action('enqueue_block_assets', array($this, 'enqueue_styles'));
+
+		require_once ZAMKAI_YT_GALLERY . 'php/functions/cache-handler.php';
+
+		require_once ZAMKAI_YT_GALLERY . 'php/admin/zkyt-dashboard.php';
 
 		add_action( 'admin_init', 'handle_cache_clear' );
 
@@ -108,7 +112,7 @@ class Zamkai_YTPG_Admin {
 	 */
 	public function enqueue_styles() {
 		
-        require_once ZAMKAI_YT_GALLERY . 'php/zkyt-styles.php';
+        require_once ZAMKAI_YT_GALLERY . 'php/admin/zkyt-styles.php';
 
 	}
 }
