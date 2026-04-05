@@ -46,6 +46,14 @@ class Zamkai_YTPG_Admin {
 			array( $this, 'settings_page' ),      // Function to display the page
 			'dashicons-youtube'                // Custom dashicon YT image for menu page
 		);
+		add_menu_page(
+			'Zamkai YouTube Gallery Dashboard',  // Page title (shows in browser tab)
+			'Dashbaord',                // Menu title (shows in sidebar)
+			'manage_options',                  // Required user permission (only admins)
+			'zamkai-yt-gallery',           // Unique page identifier (slug)
+			array( $this, 'settings_page' ),      // Function to display the page
+			'dashicons-youtube'                // Custom dashicon YT image for menu page
+		);
 	}
 
     /**
